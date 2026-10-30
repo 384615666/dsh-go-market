@@ -63,9 +63,9 @@ npm run watch                 # 查 dist-tags.latest 并检查新版，输出 re
 
 ## 维护与发布准备
 
-本仓库是 DSH Go 官方插件目录的源码；GitHub Pages 发布经过检查的格式 1 目录和 DSH Go 风险元数据。应用通过 `go.dshtui.com/market/` 读取配对目录。
+公开目录仓库为 [ccch1mneyyy/dsh-go-market](https://github.com/ccch1mneyyy/dsh-go-market)，Pages 地址为 https://ccch1mneyyy.github.io/dsh-go-market/ 。本目录保存对应的维护源码；独立仓库以本目录内容作为根目录，`.github` 位于根目录。
 
-首次上线需维护者：
+部署配置与维护要求：
 
 - 创建 `ccch1mneyyy/dsh-go-market`，默认分支 main，允许 GitHub Actions 创建 PR，并启用 auto-merge 和 squash。
 - 为 main 配置严格分支保护：要求最新 base 和 `market/catalog` 状态；其他必须通过的检查也加入 required checks。按 GitHub Actions 来源约束此状态，避免其他写入者伪造。工作流检测缺少这条保护会拒绝自动合并，不会自行降低保护。

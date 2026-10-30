@@ -45,3 +45,23 @@ Worker 测试覆盖十分钟缓存及剩余有效期、上游失败/坏 JSON/超
 修复后运行 `npm test`：22/22 通过。新增用例覆盖固定 SHA 读取、分支在读取期间变化后返回、工作流实际 JavaScript 接线、非法 Git mode、内容身份不一致、非规范 tar 路径和重复目标。GitHub API 全部用本地测试对象模拟，没有向远端写入或执行工作流。三个工作流的 actionlint 1.7.7 与全部五段内嵌 JavaScript 语法检查通过。Worker 路由没有改动，112 项既有 Worker 验证仍为上表记录的先前结果。
 
 后续跨平台路径检查：拒绝任意路径段的尾部点/空格或冒号，并将解包目标忽略大小写后去重。新增 manifest/嵌套文件/目录冲突与正常混合大小写文件用例，`npm test` 24/24 通过，两份原始 npm tarball 夹具结果不变；`node --check scripts/core.mjs` 与 `git diff --check` 通过。本轮是 Linux 上的离线归档解析验证，没有执行 Windows 安装或远端操作。
+
+## 2026-10-31 线上目录部署
+
+已创建公开仓库 `ccch1mneyyy/dsh-go-market`，Pages 工作流运行 `41099576267` 成功；公开 index 与 sidecar 返回 HTTP 200。main 已配置严格分支保护并要求 GitHub Actions 的 `market/catalog` 检查，启用 squash / auto-merge。以上更新了前文的本地验证边界；插件安装和真机适配仍不在此验证范围。Worker 接口验收见下。
+
+
+### Worker 线上验收与运行时修复
+
+2026-10-30 17:39 UTC（本地 2026-10-31 01:39）部署并验收 Worker 版本 `3c31b096-b938-41a6-92ce-ff90e603999d`，代码修复为 `8ec9b86b`、`8b014d75`。市场初次上线返回 503；受限线上日志记录 `TypeError`，根因为 Workers 不支持 `redirect: 'error'`，在构造请求时即抛错。改用 `redirect: 'manual'`，并由既有 `!response.ok` 检查拒绝 3xx，保持禁止跟随重定向的边界；增加 302 回归覆盖。运行时限制见 [Cloudflare Request 文档](https://developers.cloudflare.com/workers/runtime-apis/request/)。失败诊断仅记录固定原因、受限异常类型和 HTTP 状态，不记录 URL、响应正文或任意异常消息。
+
+| 验证范围 | 结果 |
+| --- | --- |
+| `https://go.dshtui.com/market/index.json` | HTTP 200、JSON、`X-Market-Stale: false` |
+| `https://go.dshtui.com/market/dsh-go.json` | HTTP 200、JSON、`X-Market-Stale: false` |
+| 真实线上双文件执行导出的 `validateCatalog` | 通过，4 个插件，索引与 sidecar 配对有效 |
+| Worker 全量 `npm test -- --exclude '.harness-tmp/**'` | 7 个已提交测试文件、113 项通过；排除临时线上验收脚本以免混入正式测试计数 |
+| Worker `tsc --noEmit` | 通过 |
+| 部署脚本真实分享链路 E2E | 上传、读取、解密、页面及安全头、token/admin 删除全部通过 |
+
+默认 `npm test` 亦通过，共 115 项，其中另外 2 项为临时的 Pages/Worker 真实目录配对校验。以上确认公开市场接口和既有分享链路运行正常；没有扩大到 App 插件安装、宿主安装字节一致性、依赖树安全性或真机适配验证。
