@@ -65,3 +65,17 @@ Worker 测试覆盖十分钟缓存及剩余有效期、上游失败/坏 JSON/超
 | 部署脚本真实分享链路 E2E | 上传、读取、解密、页面及安全头、token/admin 删除全部通过 |
 
 默认 `npm test` 亦通过，共 115 项，其中另外 2 项为临时的 Pages/Worker 真实目录配对校验。以上确认公开市场接口和既有分享链路运行正常；没有扩大到 App 插件安装、宿主安装字节一致性、依赖树安全性或真机适配验证。
+
+## 2026-10-31 媒体插件 0.2.1 正式发布与市场收录
+
+正式收录包为 `@ccch1mneyyy/dsh-media@0.2.1`。2026-10-30 19:55:51 UTC 已验证匿名精确版本 HTTP 200、公开 tarball 完整下载；19 个文件、压缩 48019 字节，SHA-256 为 `9829f5106dec8cb354c203c74cc0510656f0f94538c36abf0fb80226388d13c9`，内容与本地发布包一致。注册表 SHA-512 为：
+
+```text
+sha512-OCm2F4PwrCaNptn2TLTiZvlcK2RY7vmSNW8Qa3uu8YlUzt49pMSS9VdHQ3sKUUB9VEvST3+bjxs0TlfR4wdbmg==
+```
+
+媒体源码此前通过 306 项 Node 测试；`0.2.1` 与该已测包只有 package.json 版本号差异。市场在 19:56 UTC 起重新读取真实 npm 发布物：解包 163812 字节，MIT/OSI 许可、归档安全、包身份和 DSH bundle patch 均通过，精确版本公告为空。识别为 `adapted: true`、`minApp: 1.0.2`、`features: [media]`，风险为 medium，保留 shell、network、filesystem 特征及实际文件证据。
+
+`plugins/` 只加入这个媒体条目，维护者 policy 将其标为 official；总目录为 5 个固定版本。原计划 `@dsh-go/media` 发布失败；备用包 `0.2.0` 曾成功暂存并核对下载内容，但审批接口返回 404，根因未定。新发布凭据获得直发权限后，`0.2.0` 因已暂存返回 409，因此只升级版本号到 `0.2.1` 完成正式发布。未将旧包名、暂存版本或占位版本加入市场。
+
+本轮市场 `npm test` 24 项离线测试通过，`npm run check` 通过全部 5 个精确版本；构建始终重新下载并检查 npm tarball、核对 SHA-512 和公告，再调用官方格式 1 validator。Pages 和 Worker 的部署验收在发布后单独记录。市场静态检查不执行插件、不解析依赖树，也不证明 App 安装字节一致性、真实付费生成或设备完整媒体链路。
