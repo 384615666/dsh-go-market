@@ -60,7 +60,7 @@ Worker 测试覆盖十分钟缓存及剩余有效期、上游失败/坏 JSON/超
 | `https://go.dshtui.com/market/index.json` | HTTP 200、JSON、`X-Market-Stale: false` |
 | `https://go.dshtui.com/market/dsh-go.json` | HTTP 200、JSON、`X-Market-Stale: false` |
 | 真实线上双文件执行导出的 `validateCatalog` | 通过，4 个插件，索引与 sidecar 配对有效 |
-| Worker 全量 `npm test -- --exclude '.harness-tmp/**'` | 7 个已提交测试文件、113 项通过；排除临时线上验收脚本以免混入正式测试计数 |
+| Worker 全量正式测试（排除本机临时验收脚本） | 7 个已提交测试文件、113 项通过；排除临时线上验收脚本以免混入正式测试计数 |
 | Worker `tsc --noEmit` | 通过 |
 | 部署脚本真实分享链路 E2E | 上传、读取、解密、页面及安全头、token/admin 删除全部通过 |
 
